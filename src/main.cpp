@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include <si5351.h>
 #include <LiquidCrystal_I2C.h>
+#include "screenMacros.h"
 
 #define SDA_PIN 6
 #define SCL_PIN 7
@@ -23,51 +24,6 @@ bool backlightOn = true;
 // TODO: Add ways to change the carrier frequency and to turn the transmitter on/off.
 uint64_t carrierFreq = 6000000ULL; // 6 MHz
 bool transmitterOn = true;
-
-void showBootScreen()
-{
-  lcd.clear();
-
-  lcd.setCursor(5, 0);
-  lcd.print("OH7DNE");
-
-  lcd.setCursor(3, 1);
-  lcd.print("Null Radio");
-
-  delay(2000);
-
-  lcd.clear();
-
-  lcd.setCursor(1, 0);
-  lcd.print("AM Transmitter");
-
-  lcd.setCursor(1, 1);
-  lcd.print("Starting...");
-}
-
-void showErrorScreen()
-{
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Si5351 Missing");
-
-  lcd.setCursor(0, 1);
-  lcd.print("Retrying...");
-}
-
-void updateDisplay()
-{
-  lcd.clear();
-
-  lcd.setCursor(0, 0);
-  lcd.print("Carrier Freq:");
-
-  lcd.setCursor(0, 1);
-
-  float mhz = carrierFreq / 1000000.0;
-  lcd.print(mhz, 3);
-  lcd.print(" MHz");
-}
 
 void updateFrequency()
 {
@@ -97,7 +53,7 @@ void setup()
 
   lastActivityTime = millis();
 
-  showBootScreen();
+  showBootScreen(lcd);
   delay(2000);
 
   lastCLKState = digitalRead(ENC_CLK);
@@ -110,11 +66,11 @@ void loop()
     if (initSi5351())
     {
       si5351Connected = true;
-      updateDisplay();
+      updateDisplay(lcd, carrierFreq);
     }
     else
     {
-      showErrorScreen();
+      showErrorScreen(lcd);
       delay(2000);
       return;
     }
@@ -147,7 +103,7 @@ void loop()
     }
 
     updateFrequency();
-    updateDisplay();
+    updateDisplay(lcd, carrierFreq);
   }
 
   lastCLKState = currentCLKState;
