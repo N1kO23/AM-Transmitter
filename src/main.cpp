@@ -17,11 +17,22 @@ bool transmitterOn = true;
 void showBootScreen()
 {
   lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(" AM Transmitter ");
 
-  lcd.setCursor(0, 1);
-  lcd.print(" Starting...");
+  lcd.setCursor(5, 0);
+  lcd.print("OH7DNE");
+
+  lcd.setCursor(3, 1);
+  lcd.print("Null Radio");
+
+  delay(2000);
+
+  lcd.clear();
+
+  lcd.setCursor(1, 0);
+  lcd.print("AM Transmitter");
+
+  lcd.setCursor(1, 1);
+  lcd.print("Starting...");
 }
 
 void showErrorScreen()
