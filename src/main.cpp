@@ -2,6 +2,7 @@
 #include <si5351.h>
 #include <LiquidCrystal_I2C.h>
 #include "screenMacros.h"
+#include <Preferences.h>
 
 #define SDA_PIN 6
 #define SCL_PIN 7
@@ -9,6 +10,7 @@
 #define ENC_CLK 2
 #define ENC_DT 3
 
+Preferences preferences;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Si5351 si5351;
 
@@ -20,6 +22,9 @@ int lastCLKState;
 unsigned long lastActivityTime = 0;
 const unsigned long backlightTimeout = 10000; // 10 seconds
 bool backlightOn = true;
+
+const unsigned long saveInterval = 5000; // 5 seconds
+bool freqChanged = false;
 
 // TODO: Add ways to change the carrier frequency and to turn the transmitter on/off.
 uint64_t carrierFreq = 6000000ULL; // 6 MHz
@@ -45,17 +50,20 @@ void setup()
 {
   Wire.begin(SDA_PIN, SCL_PIN);
 
-  pinMode(ENC_CLK, INPUT_PULLUP);
-  pinMode(ENC_DT, INPUT_PULLUP);
-
   lcd.init();
   lcd.backlight();
 
-  lastActivityTime = millis();
-
   showBootScreen(lcd);
+
+  preferences.begin("radio", false);
+  carrierFreq = preferences.getULong64("freq", carrierFreq);
+
+  pinMode(ENC_CLK, INPUT_PULLUP);
+  pinMode(ENC_DT, INPUT_PULLUP);
+
   delay(2000);
 
+  lastActivityTime = millis();
   lastCLKState = digitalRead(ENC_CLK);
 }
 
@@ -88,6 +96,7 @@ void loop()
       backlightOn = true;
     }
 
+    freqChanged = true;
     lastActivityTime = millis();
 
     if (digitalRead(ENC_DT) != currentCLKState)
@@ -113,5 +122,12 @@ void loop()
   {
     lcd.noBacklight();
     backlightOn = false;
+  }
+
+  // Save frequency to preferences if changed and after save interval
+  if (freqChanged && (millis() - lastActivityTime > saveInterval))
+  {
+    preferences.putULong64("freq", carrierFreq);
+    freqChanged = false;
   }
 }
