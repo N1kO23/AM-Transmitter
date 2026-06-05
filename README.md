@@ -4,20 +4,20 @@ A homebrew, micro-controlled Amplitude Modulation (AM) transmitter designed for 
 
 ## Features
 
-- **Precise VFO Generation:** Utilizes an Si5351A programmable clock generator for highly stable, drift-free carrier generation across the HF spectrum.
-- **Microcontroller Controlled:** Arduino-based firmware managing I2C communications, frequency offsets, and peripheral interfacing.
-- **Designed for HF Operation:** Tailored architecture for the 6 MHz shortwave spectrum with customizable tuning steps.
-- **Optimized for Hardware Integration:** Structured to easily interface with high-efficiency MOSFET power amplifiers (PA) and dedicated audio modulation stages.
+- **Precise VFO Generation:** Utilizes an Si5351A programmable clock generator for highly stable, drift-free carrier generation across the HF spectrum
+- **Microcontroller Controlled:** Arduino-based firmware managing I2C communications, frequency offsets, and peripheral interfacing
+- **Designed for HF Operation:** Tailored architecture for the 6 MHz shortwave spectrum with customizable tuning steps
+- **Optimized for Hardware Integration:** Structured to easily interface with high-efficiency MOSFET power amplifiers (PA) and dedicated audio modulation stages
 
 ## Hardware Architecture Overview
 
 This project serves as the control and exciter core of a complete RF transmission chain, which typically includes:
 
-1. **Exciter / Controller:** Arduino (Nano/Uno or compatible) interfacing via I2C with an Si5351A clock generator breakout board.
-2. **Audio Processing & Modulator:** Audio conditioning circuit optimizing dynamic range and driving the modulation path (high-level or low-level modulation).
-3. **Power Amplifier (PA):** High-efficiency MOSFET output stage designed for optimal output impedance matching into a 50Ω load.
-4. **Low-Pass Filter (LPF):** A dedicated output harmonic suppression network tailored for the 6 MHz band to clear unwanted emissions.
-5. **Antenna System:** Designed to feed a resonant, properly tuned dipole antenna or matching network.
+1. **Exciter / Controller:** Arduino (Nano/Uno or compatible) interfacing via I2C with an Si5351A clock generator breakout board
+2. **Audio Processing & Modulator:** Audio conditioning circuit optimizing dynamic range and driving the modulation path (high-level or low-level modulation)
+3. **Power Amplifier (PA):** High-efficiency MOSFET output stage designed for optimal output impedance matching into a 50Ω load
+4. **Low-Pass Filter (LPF):** A dedicated output harmonic suppression network tailored for the 6 MHz band to clear unwanted emissions
+5. **Antenna System:** Designed to feed a resonant, properly tuned dipole antenna or matching network
 
 ---
 
@@ -29,13 +29,13 @@ To compile and flash this firmware, ensure you have the following installed:
 - [Arduino IDE](https://www.arduino.cc/en/software) or [PlatformIO](https://platformio.org/)
 - **Required Libraries:**
   - `Wire.h` (Built-in I2C support)
-  - `Etherkit Si5351` library (by Jason Mildrum, NT7S) or equivalent register configuration library.
+  - `Etherkit Si5351` library (by Jason Mildrum, NT7S) or equivalent register configuration library
 
 ### Installation & Configuration
 
 1. Clone the repository to your local development environment:
    ```bash
-   git clone [https://github.com/N1kO23/AM-Transmitter.git](https://github.com/N1kO23/AM-Transmitter.git)
+   git clone https://github.com/N1kO23/AM-Transmitter.git
    cd AM-Transmitter
 2. Open the project folder in your preferred IDE
 3. Review the configuration parameters at the top of the main source file to set your operating frequency limits, I2C address, and crystal calibration offsets:
